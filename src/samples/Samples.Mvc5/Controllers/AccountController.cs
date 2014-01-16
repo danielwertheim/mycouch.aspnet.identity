@@ -12,7 +12,7 @@ namespace Samples.Mvc5.Controllers
     public class AccountController : Controller
     {
         public AccountController()
-            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>()))
+            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(MvcApplication.Client)))
         {
         }
 

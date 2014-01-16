@@ -6,8 +6,4 @@ namespace Samples.Mvc5.Models
     public class ApplicationUser : IdentityUser
     {
     }
-
-    public class ApplicationDbContext
-    {
-    }
 }
