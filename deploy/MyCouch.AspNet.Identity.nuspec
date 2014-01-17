@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>MyCouch.AspNet.Identity</id>
+    <title>MyCouch.AspNet.Identity - an ASP.Net identity provider for CouchDb and Cloudant</title>
+    <version>$version$</version>
+    <authors>danielwertheim</authors>
+    <copyright>Copyright 2014 Daniel Wertheim</copyright>
+    <summary>An ASP.Net identity provider for CouchDb and Cloudant.</summary>
+    <description>
+      A simple implementation of the new ASP.Net identity provider model for handling authentication and authorization in e.g. ASP.Net MVC5 using CouchDb or Cloudant as storage.
+
+      Please NOTE. If you don't have NuGet up to date, some users has experienced issues with resolving dependencies.
+    </description>
+    <iconUrl>http://www.mycouchclient.com/logos/mycouch-nuget.png</iconUrl>
+    <projectUrl>https://github.com/danielwertheim/mycouch.aspnet.identity</projectUrl>
+    <licenseUrl>https://github.com/danielwertheim/mycouch.aspnet.identity#license</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>aspnet mvc identity membership couchdb cloudant nosql json document-db documents poco async asynchronous</tags>
+    <dependencies>
+       <group targetFramework="net45">
+         <dependency id="Microsoft.AspNet.Identity.Core" version="1.0.0" />
+         <dependency id="MyCouch" version="[0.20.0]" />
+       </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Net45\MyCouch.AspNet.Identity.Net45.dll" target="lib\net45" />
+  </files>
+</package>
