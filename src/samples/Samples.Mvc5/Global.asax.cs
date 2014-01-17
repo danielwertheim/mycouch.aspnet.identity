@@ -2,6 +2,7 @@
 using System.Web.Optimization;
 using System.Web.Routing;
 using MyCouch;
+using MyCouch.AspNet.Identity;
 
 namespace Samples.Mvc5
 {
@@ -9,14 +10,21 @@ namespace Samples.Mvc5
     {
         internal static IClient Client { get; private set; }
 
-        protected void Application_Start()
+        protected async void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            Client = new Client("http://localhost:5984/aspnet_identity");
+            var uri = new MyCouchUriBuilder("http://localhost:5984")
+                .SetDbName("aspnet_identity")
+                .SetBasicCredentials("demo", "p@ssword")
+                .Build();
+
+            Client = new Client(uri);
+
+            await Client.EnsureDesignDocsExists();
         }
     }
 }
