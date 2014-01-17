@@ -206,12 +206,7 @@ namespace MyCouch.AspNet.Identity
             Ensure.That(user, "user").IsNotNull();
             Ensure.That(claim, "claim").IsNotNull();
 
-            if(!user.HasClaim(claim.Type, claim.ValueType))
-                user.Claims.Add(new IdentityUserClaim
-                {
-                    ClaimType = claim.Type,
-                    ClaimValue = claim.Value
-                });
+            user.AssignClaim(claim.Type, claim.Value);
 
             return Task.FromResult(0);
         }
@@ -223,9 +218,7 @@ namespace MyCouch.AspNet.Identity
             Ensure.That(user, "user").IsNotNull();
             Ensure.That(claim, "claim").IsNotNull();
 
-            user.Claims.RemoveAll(i =>
-                i.ClaimType.Equals(claim.Type, StringComparison.OrdinalIgnoreCase) &&
-                i.ClaimValue.Equals(claim.Value, StringComparison.OrdinalIgnoreCase));
+            user.RemoveClaim(claim.Type, claim.Value);
 
             return Task.FromResult(0);
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using EnsureThat;
 using Microsoft.AspNet.Identity;
 
@@ -62,7 +63,9 @@ namespace MyCouch.AspNet.Identity
         public virtual void RemoveLogin(string loginProvider, string providerKey)
         {
             if (HasLogins())
-                Logins.RemoveAll(x => x.LoginProvider.Equals(loginProvider, StringComparison.OrdinalIgnoreCase) && x.ProviderKey.Equals(providerKey, StringComparison.OrdinalIgnoreCase));
+                Logins.RemoveAll(x =>
+                    x.LoginProvider.Equals(loginProvider, StringComparison.OrdinalIgnoreCase) &&
+                    x.ProviderKey.Equals(providerKey, StringComparison.OrdinalIgnoreCase));
         }
 
         public virtual bool HasLogin(string loginProvider, string providerKey)
@@ -75,6 +78,24 @@ namespace MyCouch.AspNet.Identity
         public virtual bool HasLogins()
         {
             return Logins != null && Logins.Any();
+        }
+
+        public virtual void AssignClaim(string claimType, string claimValue)
+        {
+            if (!HasClaim(claimType, claimValue))
+                Claims.Add(new IdentityUserClaim
+                {
+                    ClaimType = claimType,
+                    ClaimValue = claimValue
+                });
+        }
+
+        public virtual void RemoveClaim(string claimType, string claimValue)
+        {
+            if (HasClaims())
+                Claims.RemoveAll(x =>
+                    x.ClaimType.Equals(claimType, StringComparison.OrdinalIgnoreCase) &&
+                    x.ClaimValue.Equals(claimValue, StringComparison.OrdinalIgnoreCase));
         }
 
         public virtual bool HasClaim(string claimType, string claimValue)
