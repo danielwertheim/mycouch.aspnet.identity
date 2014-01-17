@@ -9,7 +9,7 @@ namespace MyCouch.AspNet.Identity
     [Document(DocType = "IdentityUser")]
     public class IdentityUser : IUser
     {
-        public string Id { get { return UserName; } }
+        public string Id { get; set; }
         public string Rev { get; set; }
         public string UserName { get; set; }
         public string PasswordHash { get; set; }

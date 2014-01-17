@@ -12,14 +12,14 @@ namespace Samples.Mvc5.Controllers
     public class AccountController : Controller
     {
         public AccountController()
-            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(MvcApplication.Client)))
         {
+            UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(MvcApplication.Client));
         }
 
-        public AccountController(UserManager<ApplicationUser> userManager)
-        {
-            UserManager = userManager;
-        }
+        //public AccountController(UserManager<ApplicationUser> userManager)
+        //{
+        //    UserManager = userManager;
+        //}
 
         public UserManager<ApplicationUser> UserManager { get; private set; }
 

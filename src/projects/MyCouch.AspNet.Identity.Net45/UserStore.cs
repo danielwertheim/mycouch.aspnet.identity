@@ -23,7 +23,7 @@ namespace MyCouch.AspNet.Identity
         {
             Ensure.That(client, "client").IsNotNull();
 
-            DisposeClient = true;
+            DisposeClient = false;
             Client = client;
         }
 
@@ -91,13 +91,17 @@ namespace MyCouch.AspNet.Identity
             return Client.Entities.GetAsync<TUser>(userId).ContinueWith(r => r.Result.Entity);
         }
 
-        public virtual Task<TUser> FindByNameAsync(string userName)
+        public async virtual Task<TUser> FindByNameAsync(string userName)
         {
             ThrowIfDisposed();
 
             Ensure.That(userName, "userName").IsNotNullOrWhiteSpace();
 
-            return Client.Entities.GetAsync<TUser>(userName).ContinueWith(r => r.Result.Entity);
+            var qr = await Client.Views.QueryAsync<string>("userstore", "usernames", q => q.Key(userName));
+
+            return qr.IsEmpty
+                ? await Task.FromResult(null as TUser)
+                : await Client.Entities.GetAsync<TUser>(qr.Rows[0].Id).ContinueWith(r => r.Result.Entity);
         }
 
         public virtual Task SetPasswordHashAsync(TUser user, string passwordHash)
@@ -174,6 +178,8 @@ namespace MyCouch.AspNet.Identity
             Ensure.That(login, "login").IsNotNull();
 
             throw new System.NotImplementedException();
+
+            //TODO: IUserLoginStore, FindAsync
         }
     }
 }
