@@ -168,7 +168,9 @@ namespace MyCouch.AspNet.Identity
 
             Ensure.That(user, "user").IsNotNull();
 
-            IList<UserLoginInfo> logins = user.Logins.Select(i => new UserLoginInfo(i.LoginProvider, i.ProviderKey)).ToList();
+            IList<UserLoginInfo> logins = user.HasLogins()
+                ? user.Logins.Select(i => new UserLoginInfo(i.LoginProvider, i.ProviderKey)).ToList()
+                : new List<UserLoginInfo>();
 
             return Task.FromResult(logins);
         }

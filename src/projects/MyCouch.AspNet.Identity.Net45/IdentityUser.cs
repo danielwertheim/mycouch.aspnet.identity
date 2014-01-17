@@ -22,5 +22,10 @@ namespace MyCouch.AspNet.Identity
                 i.LoginProvider.Equals(loginProvider, StringComparison.OrdinalIgnoreCase) &&
                 i.ProviderKey.Equals(providerKey, StringComparison.OrdinalIgnoreCase));
         }
+
+        public virtual bool HasLogins()
+        {
+            return Logins != null && Logins.Any();
+        }
     }
 }
