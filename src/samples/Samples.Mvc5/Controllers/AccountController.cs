@@ -13,7 +13,7 @@ namespace Samples.Mvc5.Controllers
     {
         public AccountController()
         {
-            UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(MvcApplication.Client));
+            UserManager = new UserManager<ApplicationUser>(new MyCouchUserStore<ApplicationUser>(MvcApplication.Client));
         }
 
         public UserManager<ApplicationUser> UserManager { get; private set; }

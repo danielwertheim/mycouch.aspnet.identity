@@ -9,9 +9,9 @@ using Microsoft.AspNet.Identity;
 namespace MyCouch.AspNet.Identity
 {
     //http://msdn.microsoft.com/en-us/library/hh524395.aspx#BKMK_TaskReturnType
-
     //TODO: Perhaps add a ThrowIfNotSuccessful to each call and check the response.IsSuccess
-    public class UserStore<TUser> :
+    //TODO: Switch for MyCouchStore when v0.21.0 is out
+    public class MyCouchUserStore<TUser> :
         IUserPasswordStore<TUser>,
         IUserLoginStore<TUser>,
         IUserClaimStore<TUser>,
@@ -26,7 +26,7 @@ namespace MyCouch.AspNet.Identity
 
         public bool DisposeClient { get; set; }
 
-        public UserStore(IClient client)
+        public MyCouchUserStore(IClient client)
         {
             Ensure.That(client, "client").IsNotNull();
 
