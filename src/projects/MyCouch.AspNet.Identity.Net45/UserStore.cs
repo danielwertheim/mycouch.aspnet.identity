@@ -242,8 +242,7 @@ namespace MyCouch.AspNet.Identity
             Ensure.That(user, "user").IsNotNull();
             Ensure.That(role, "role").IsNotNullOrWhiteSpace();
 
-            if (!user.HasRole(role))
-                user.Roles.Add(role);
+            user.AssignRole(role);
 
             return Task.FromResult(0);
         }
@@ -255,9 +254,7 @@ namespace MyCouch.AspNet.Identity
             Ensure.That(user, "user").IsNotNull();
             Ensure.That(role, "role").IsNotNullOrWhiteSpace();
 
-            if (user.HasRole(role))
-                user.Roles.RemoveAll(i =>
-                    i.Equals(role, StringComparison.OrdinalIgnoreCase));
+            user.RemoveRole(role);
 
             return Task.FromResult(0);
         }
@@ -268,9 +265,7 @@ namespace MyCouch.AspNet.Identity
 
             Ensure.That(user, "user").IsNotNull();
 
-            IList<string> roles = user.HasRoles()
-                ? user.Roles
-                : new List<string>();
+            IList<string> roles = user.Roles ?? new List<string>();
 
             return Task.FromResult(roles);
         }

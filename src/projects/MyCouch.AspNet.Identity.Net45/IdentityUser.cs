@@ -24,13 +24,26 @@ namespace MyCouch.AspNet.Identity
             Claims = new List<IdentityUserClaim>();
         }
 
-        public bool HasRole(string role)
+        public virtual void AssignRole(string role)
+        {
+            if(!HasRole(role))
+                Roles.Add(role);
+        }
+
+        public virtual void RemoveRole(string role)
+        {
+            if (HasRoles())
+                Roles.RemoveAll(i =>
+                    i.Equals(role, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public virtual bool HasRole(string role)
         {
             return HasRoles() && Roles.Any(i =>
                 i.Equals(role, StringComparison.OrdinalIgnoreCase));
         }
 
-        public bool HasRoles()
+        public virtual bool HasRoles()
         {
             return Roles != null && Roles.Any();
         }
