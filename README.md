@@ -1,6 +1,8 @@
 # MyCouch.AspNet.Identity #
 A simple implementation of the new ASP.Net identity provider model for handling authentication and authorization in e.g. ASP.Net MVC5 using CouchDb or Cloudant as storage.
 
+Uses [MyCouch - The asynchronous CouchDb and Cloudant client for .Net](https://github.com/danielwertheim/mycouch).
+
 ## NuGet ##
 MyCouch.AspNet.Identity is distributed via NuGet. You can [find the CouchDb package here](https://nuget.org/packages/MyCouch.AspNet.Identity/). But basically, in any .Net4.0, .Net4.5 or Windows Store app project, open up the Package manager console, and invoke:
 
