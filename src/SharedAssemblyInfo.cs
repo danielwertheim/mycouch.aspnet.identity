@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyDescription("MyCouch.AspNet.Identity")]
 [assembly: AssemblyCompany("Daniel Wertheim")]
-[assembly: AssemblyCopyright("Copyright © 2013 Daniel Wertheim")]
+[assembly: AssemblyCopyright("Copyright © 2014 Daniel Wertheim")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

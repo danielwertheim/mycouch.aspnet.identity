@@ -32,7 +32,7 @@ namespace Samples.Mvc5
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication();
+            app.UseGoogleAuthentication();
         }
     }
 }

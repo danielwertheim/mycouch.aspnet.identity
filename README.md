@@ -1,8 +1,10 @@
 # MyCouch.AspNet.Identity #
-A simple implementation of the new ASP.Net identity models for handling authentication and authorization in e.g. ASP.Net MVC5.
+A simple implementation of the new ASP.Net identity provider model for handling authentication and authorization in e.g. ASP.Net MVC5 using CouchDb or Cloudant as storage.
+
+Uses [MyCouch - The asynchronous CouchDb and Cloudant client for .Net](https://github.com/danielwertheim/mycouch).
 
 ## NuGet ##
-MyCouch.AspNet.Identity is distributed via NuGet. You can [find the CouchDb package here](https://nuget.org/packages/MyCouch.AspNet.Identity/). But basically, in a .Net4.0, .Net4.5 or Windows Store app project, open up the Package manager console, and invoke:
+MyCouch.AspNet.Identity is distributed via NuGet. You can [find the CouchDb package here](https://nuget.org/packages/MyCouch.AspNet.Identity/). But basically, in any .Net4.0, .Net4.5 or Windows Store app project, open up the Package manager console, and invoke:
 
     pm:> install-package mycouch.aspnet.identity
 
@@ -25,7 +27,7 @@ So you have issues or questions... Great! That means someone is using it. Use th
 ## License ##
 The MIT License (MIT)
 
-Copyright (c) 2013 Daniel Wertheim
+Copyright (c) 2014 Daniel Wertheim
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
