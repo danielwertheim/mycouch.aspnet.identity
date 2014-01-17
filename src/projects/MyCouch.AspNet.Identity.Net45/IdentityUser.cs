@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EnsureThat;
 using Microsoft.AspNet.Identity;
 
 namespace MyCouch.AspNet.Identity
@@ -26,7 +27,7 @@ namespace MyCouch.AspNet.Identity
 
         public virtual void AssignRole(string role)
         {
-            if(!HasRole(role))
+            if (!HasRole(role))
                 Roles.Add(role);
         }
 
@@ -46,6 +47,22 @@ namespace MyCouch.AspNet.Identity
         public virtual bool HasRoles()
         {
             return Roles != null && Roles.Any();
+        }
+
+        public virtual void AssignLogin(string loginProvider, string providerKey)
+        {
+            if (!HasLogin(loginProvider, providerKey))
+                Logins.Add(new IdentityUserLogin
+                {
+                    LoginProvider = loginProvider,
+                    ProviderKey = providerKey
+                });
+        }
+
+        public virtual void RemoveLogin(string loginProvider, string providerKey)
+        {
+            if (HasLogins())
+                Logins.RemoveAll(x => x.LoginProvider.Equals(loginProvider, StringComparison.OrdinalIgnoreCase) && x.ProviderKey.Equals(providerKey, StringComparison.OrdinalIgnoreCase));
         }
 
         public virtual bool HasLogin(string loginProvider, string providerKey)

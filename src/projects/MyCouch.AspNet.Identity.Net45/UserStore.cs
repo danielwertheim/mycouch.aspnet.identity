@@ -143,12 +143,7 @@ namespace MyCouch.AspNet.Identity
             Ensure.That(user, "user").IsNotNull();
             Ensure.That(login, "login").IsNotNull();
 
-            if (!user.HasLogin(login.LoginProvider, login.ProviderKey))
-                user.Logins.Add(new IdentityUserLogin
-                {
-                    LoginProvider = login.LoginProvider,
-                    ProviderKey = login.ProviderKey
-                });
+            user.AssignLogin(login.LoginProvider, login.ProviderKey);
 
             return Task.FromResult(0);
         }
@@ -160,7 +155,7 @@ namespace MyCouch.AspNet.Identity
             Ensure.That(user, "user").IsNotNull();
             Ensure.That(login, "login").IsNotNull();
 
-            user.Logins.RemoveAll(x => x.LoginProvider == login.LoginProvider && x.ProviderKey == login.ProviderKey);
+            user.RemoveLogin(login.LoginProvider, login.ProviderKey);
 
             return Task.FromResult(0);
         }
