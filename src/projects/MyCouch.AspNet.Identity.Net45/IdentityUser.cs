@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using EnsureThat;
 using Microsoft.AspNet.Identity;
 
 namespace MyCouch.AspNet.Identity
@@ -15,6 +13,7 @@ namespace MyCouch.AspNet.Identity
         public string Rev { get; set; }
         public string UserName { get; set; }
         public string PasswordHash { get; set; }
+        public string SecurityStamp { get; set; }
         public List<string> Roles { get; set; }
         public List<IdentityUserLogin> Logins { get; set; }
         public List<IdentityUserClaim> Claims { get; set; }

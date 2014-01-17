@@ -15,7 +15,8 @@ namespace MyCouch.AspNet.Identity
         IUserPasswordStore<TUser>,
         IUserLoginStore<TUser>,
         IUserClaimStore<TUser>,
-        IUserRoleStore<TUser> where TUser : IdentityUser, IUser
+        IUserRoleStore<TUser>,
+        IUserSecurityStampStore<TUser> where TUser : IdentityUser, IUser
     {
         private readonly ViewIdentity _usernamesView;
         private readonly ViewIdentity _loginProviderProviderKeyView;
@@ -278,6 +279,26 @@ namespace MyCouch.AspNet.Identity
             Ensure.That(role, "role").IsNotNullOrWhiteSpace();
 
             return Task.FromResult(user.HasRole(role));
+        }
+
+        public virtual Task SetSecurityStampAsync(TUser user, string stamp)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            user.SecurityStamp = stamp;
+
+            return Task.FromResult(0);
+        }
+
+        public virtual Task<string> GetSecurityStampAsync(TUser user)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            return Task.FromResult(user.SecurityStamp);
         }
     }
 }
