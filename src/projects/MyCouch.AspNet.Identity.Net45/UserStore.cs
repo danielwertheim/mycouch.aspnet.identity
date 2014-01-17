@@ -14,7 +14,8 @@ namespace MyCouch.AspNet.Identity
     public class UserStore<TUser> :
         IUserPasswordStore<TUser>,
         IUserLoginStore<TUser>,
-        IUserClaimStore<TUser> where TUser : IdentityUser, IUser
+        IUserClaimStore<TUser>,
+        IUserRoleStore<TUser> where TUser : IdentityUser, IUser
     {
         protected bool Disposed { get; private set; }
         protected IClient Client { get; private set; }
@@ -232,6 +233,56 @@ namespace MyCouch.AspNet.Identity
                 i.ClaimValue.Equals(claim.Value, StringComparison.OrdinalIgnoreCase));
 
             return Task.FromResult(0);
+        }
+
+        public virtual Task AddToRoleAsync(TUser user, string role)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+            Ensure.That(role, "role").IsNotNullOrWhiteSpace();
+
+            if (!user.HasRole(role))
+                user.Roles.Add(role);
+
+            return Task.FromResult(0);
+        }
+
+        public virtual Task RemoveFromRoleAsync(TUser user, string role)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+            Ensure.That(role, "role").IsNotNullOrWhiteSpace();
+
+            if (user.HasRole(role))
+                user.Roles.RemoveAll(i =>
+                    i.Equals(role, StringComparison.OrdinalIgnoreCase));
+
+            return Task.FromResult(0);
+        }
+
+        public virtual Task<IList<string>> GetRolesAsync(TUser user)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            IList<string> roles = user.HasRoles()
+                ? user.Roles
+                : new List<string>();
+
+            return Task.FromResult(roles);
+        }
+
+        public virtual Task<bool> IsInRoleAsync(TUser user, string role)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+            Ensure.That(role, "role").IsNotNullOrWhiteSpace();
+
+            return Task.FromResult(user.HasRole(role));
         }
     }
 }
