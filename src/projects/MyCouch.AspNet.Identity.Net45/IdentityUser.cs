@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity;
 namespace MyCouch.AspNet.Identity
 {
     [Serializable]
-    [Document(DocType = "IdentityUser")]
+    [Document(DocType = "IdentityUser", DocVersion = "1")]
     public class IdentityUser : IUser
     {
         public string Id { get; set; }
