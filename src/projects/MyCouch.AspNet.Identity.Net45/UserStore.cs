@@ -17,6 +17,9 @@ namespace MyCouch.AspNet.Identity
         IUserClaimStore<TUser>,
         IUserRoleStore<TUser> where TUser : IdentityUser, IUser
     {
+        private readonly ViewIdentity _usernamesView;
+        private readonly ViewIdentity _loginProviderProviderKeyView;
+
         protected bool Disposed { get; private set; }
         protected IClient Client { get; private set; }
 
@@ -25,6 +28,9 @@ namespace MyCouch.AspNet.Identity
         public UserStore(IClient client)
         {
             Ensure.That(client, "client").IsNotNull();
+
+            _usernamesView = new ViewIdentity("userstore", "usernames");
+            _loginProviderProviderKeyView = new ViewIdentity("userstore", "loginprovider_providerkey");
 
             DisposeClient = false;
             Client = client;
@@ -100,7 +106,10 @@ namespace MyCouch.AspNet.Identity
 
             Ensure.That(userName, "userName").IsNotNullOrWhiteSpace();
 
-            var qr = await Client.Views.QueryAsync<string>("userstore", "usernames", q => q.Key(userName));
+            var qr = await Client.Views.QueryAsync<string>(
+                _usernamesView.DesignDocument,
+                _usernamesView.Name,
+                q => q.Key(userName));
 
             return qr.IsEmpty
                 ? await Task.FromResult(null as TUser)
@@ -179,7 +188,10 @@ namespace MyCouch.AspNet.Identity
 
             Ensure.That(login, "login").IsNotNull();
 
-            var qr = await Client.Views.QueryAsync<string>("userstore", "loginprovider_providerkey", q => q.Key(new[]{login.LoginProvider, login.ProviderKey}));
+            var qr = await Client.Views.QueryAsync<string>(
+                _loginProviderProviderKeyView.DesignDocument,
+                _loginProviderProviderKeyView.Name,
+                q => q.Key(new[]{login.LoginProvider, login.ProviderKey}));
 
             return qr.IsEmpty
                 ? await Task.FromResult(null as TUser)
