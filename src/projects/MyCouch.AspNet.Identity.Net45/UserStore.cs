@@ -175,13 +175,15 @@ namespace MyCouch.AspNet.Identity
             return Task.FromResult(logins);
         }
 
-        public virtual Task<TUser> FindAsync(UserLoginInfo login)
+        public async virtual Task<TUser> FindAsync(UserLoginInfo login)
         {
             Ensure.That(login, "login").IsNotNull();
 
-            throw new System.NotImplementedException();
+            var qr = await Client.Views.QueryAsync<string>("userstore", "loginprovider_providerkey", q => q.Key(new[]{login.LoginProvider, login.ProviderKey}));
 
-            //TODO: IUserLoginStore, FindAsync
+            return qr.IsEmpty
+                ? await Task.FromResult(null as TUser)
+                : await Client.Entities.GetAsync<TUser>(qr.Rows[0].Id).ContinueWith(r => r.Result.Entity);
         }
     }
 }

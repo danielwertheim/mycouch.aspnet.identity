@@ -13,12 +13,16 @@ namespace MyCouch.AspNet.Identity
         public string Rev { get; set; }
         public string UserName { get; set; }
         public string PasswordHash { get; set; }
-
         public List<IdentityUserLogin> Logins { get; set; }
+
+        public IdentityUser()
+        {
+            Logins = new List<IdentityUserLogin>();
+        }
 
         public virtual bool HasLogin(string loginProvider, string providerKey)
         {
-            return Logins.Any(i =>
+            return HasLogins() && Logins.Any(i =>
                 i.LoginProvider.Equals(loginProvider, StringComparison.OrdinalIgnoreCase) &&
                 i.ProviderKey.Equals(providerKey, StringComparison.OrdinalIgnoreCase));
         }
