@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using EnsureThat;
 using Microsoft.AspNet.Identity;
@@ -12,7 +13,8 @@ namespace MyCouch.AspNet.Identity
     //TODO: Perhaps add a ThrowIfNotSuccessful to each call and check the response.IsSuccess
     public class UserStore<TUser> :
         IUserPasswordStore<TUser>,
-        IUserLoginStore<TUser> where TUser : IdentityUser, IUser
+        IUserLoginStore<TUser>,
+        IUserClaimStore<TUser> where TUser : IdentityUser, IUser
     {
         protected bool Disposed { get; private set; }
         protected IClient Client { get; private set; }
@@ -177,6 +179,8 @@ namespace MyCouch.AspNet.Identity
 
         public async virtual Task<TUser> FindAsync(UserLoginInfo login)
         {
+            ThrowIfDisposed();
+
             Ensure.That(login, "login").IsNotNull();
 
             var qr = await Client.Views.QueryAsync<string>("userstore", "loginprovider_providerkey", q => q.Key(new[]{login.LoginProvider, login.ProviderKey}));
@@ -184,6 +188,50 @@ namespace MyCouch.AspNet.Identity
             return qr.IsEmpty
                 ? await Task.FromResult(null as TUser)
                 : await Client.Entities.GetAsync<TUser>(qr.Rows[0].Id).ContinueWith(r => r.Result.Entity);
+        }
+
+        public virtual Task<IList<Claim>> GetClaimsAsync(TUser user)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            IList<Claim> claims = user.HasClaims()
+                ? user.Claims.Select(i => new Claim(i.ClaimType, i.ClaimValue)).ToList()
+                : new List<Claim>();
+
+            return Task.FromResult(claims);
+        }
+
+        public virtual Task AddClaimAsync(TUser user, Claim claim)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+            Ensure.That(claim, "claim").IsNotNull();
+
+            if(!user.HasClaim(claim.Type, claim.ValueType))
+                user.Claims.Add(new IdentityUserClaim
+                {
+                    ClaimType = claim.Type,
+                    ClaimValue = claim.Value
+                });
+
+            return Task.FromResult(0);
+        }
+
+        public virtual Task RemoveClaimAsync(TUser user, Claim claim)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+            Ensure.That(claim, "claim").IsNotNull();
+
+            user.Claims.RemoveAll(i =>
+                i.ClaimType.Equals(claim.Type, StringComparison.OrdinalIgnoreCase) &&
+                i.ClaimValue.Equals(claim.Value, StringComparison.OrdinalIgnoreCase));
+
+            return Task.FromResult(0);
         }
     }
 }

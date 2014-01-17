@@ -14,10 +14,12 @@ namespace MyCouch.AspNet.Identity
         public string UserName { get; set; }
         public string PasswordHash { get; set; }
         public List<IdentityUserLogin> Logins { get; set; }
+        public List<IdentityUserClaim> Claims { get; set; }
 
         public IdentityUser()
         {
             Logins = new List<IdentityUserLogin>();
+            Claims = new List<IdentityUserClaim>();
         }
 
         public virtual bool HasLogin(string loginProvider, string providerKey)
@@ -30,6 +32,18 @@ namespace MyCouch.AspNet.Identity
         public virtual bool HasLogins()
         {
             return Logins != null && Logins.Any();
+        }
+
+        public virtual bool HasClaim(string claimType, string claimValue)
+        {
+            return HasClaims() && Claims.Any(i =>
+                i.ClaimType.Equals(claimType, StringComparison.OrdinalIgnoreCase) &&
+                i.ClaimValue.Equals(claimValue, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public virtual bool HasClaims()
+        {
+            return Claims != null && Claims.Any();
         }
     }
 }
