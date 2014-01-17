@@ -16,11 +16,6 @@ namespace Samples.Mvc5.Controllers
             UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(MvcApplication.Client));
         }
 
-        //public AccountController(UserManager<ApplicationUser> userManager)
-        //{
-        //    UserManager = userManager;
-        //}
-
         public UserManager<ApplicationUser> UserManager { get; private set; }
 
         //
