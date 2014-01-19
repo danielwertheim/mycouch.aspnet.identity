@@ -21,7 +21,7 @@ namespace MyCouch.AspNet.Identity
         private readonly ViewIdentity _usernamesView;
         private readonly ViewIdentity _loginProviderProviderKeyView;
 
-        protected bool Disposed { get; private set; }
+        protected bool IsDisposed { get; private set; }
         protected IClient Client { get; private set; }
 
         public bool DisposeClient { get; set; }
@@ -47,7 +47,7 @@ namespace MyCouch.AspNet.Identity
         {
             ThrowIfDisposed();
 
-            Disposed = true;
+            IsDisposed = true;
 
             if (disposing && DisposeClient && Client != null)
             {
@@ -58,7 +58,7 @@ namespace MyCouch.AspNet.Identity
 
         protected virtual void ThrowIfDisposed()
         {
-            if (Disposed)
+            if (IsDisposed)
                 throw new ObjectDisposedException(GetType().Name);
         }
 
