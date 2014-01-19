@@ -13,6 +13,7 @@ namespace Samples.Mvc5.Controllers
             return View();
         }
 
+        [Authorize(Roles = "SuperHeroes")]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

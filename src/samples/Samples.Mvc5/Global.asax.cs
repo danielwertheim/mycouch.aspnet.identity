@@ -1,8 +1,10 @@
 ﻿using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Microsoft.AspNet.Identity;
 using MyCouch;
 using MyCouch.AspNet.Identity;
+using Samples.Mvc5.Models;
 
 namespace Samples.Mvc5
 {
@@ -25,6 +27,11 @@ namespace Samples.Mvc5
             Client = new Client(uri);
 
             await Client.EnsureDesignDocsExists();
+
+            //var mgr = new UserManager<ApplicationUser>(new MyCouchUserStore<ApplicationUser>(Client));
+            //var usr = new ApplicationUser {UserName = "danieltest1"};
+            //await mgr.CreateAsync(usr, "1q2w3e4r");
+            //await mgr.AddToRoleAsync(usr.Id, "SuperHeroes");
         }
     }
 }
