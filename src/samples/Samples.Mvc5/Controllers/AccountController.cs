@@ -3,6 +3,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using MyCouch;
 using MyCouch.AspNet.Identity;
 using Samples.Mvc5.Models;
 
@@ -13,7 +14,8 @@ namespace Samples.Mvc5.Controllers
     {
         public AccountController()
         {
-            UserManager = new UserManager<ApplicationUser>(new MyCouchUserStore<ApplicationUser>(MvcApplication.Client));
+            var client = (IMyCouchClient)System.Web.HttpContext.Current.Items["MyCouchClient"];
+            UserManager = new UserManager<ApplicationUser>(new MyCouchUserStore<ApplicationUser>(client));
         }
 
         public UserManager<ApplicationUser> UserManager { get; private set; }
