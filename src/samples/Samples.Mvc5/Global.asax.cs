@@ -10,7 +10,7 @@ namespace Samples.Mvc5
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        internal static IClient Client { get; private set; }
+        internal static IMyCouchClient Client { get; private set; }
 
         protected async void Application_Start()
         {
@@ -20,16 +20,16 @@ namespace Samples.Mvc5
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             var uri = new MyCouchUriBuilder("http://localhost:5984")
-                .SetDbName("aspnet_identity")
+                .SetDbName("aspnet-identity")
                 .SetBasicCredentials("demo", "p@ssword")
                 .Build();
 
-            Client = new Client(uri);
+            Client = new MyCouchClient(uri);
 
             await Client.EnsureDesignDocsExists();
 
             //var mgr = new UserManager<ApplicationUser>(new MyCouchUserStore<ApplicationUser>(Client));
-            //var usr = new ApplicationUser {UserName = "danieltest1"};
+            //var usr = new ApplicationUser { UserName = "danieltest2" };
             //await mgr.CreateAsync(usr, "1q2w3e4r");
             //await mgr.AddToRoleAsync(usr.Id, "SuperHeroes");
         }

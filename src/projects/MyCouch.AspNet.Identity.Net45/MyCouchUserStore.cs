@@ -22,11 +22,11 @@ namespace MyCouch.AspNet.Identity
         private readonly ViewIdentity _loginProviderProviderKeyView;
 
         protected bool IsDisposed { get; private set; }
-        protected IClient Client { get; private set; }
+        protected IMyCouchClient Client { get; private set; }
 
         public bool DisposeClient { get; set; }
 
-        public MyCouchUserStore(IClient client)
+        public MyCouchUserStore(IMyCouchClient client)
         {
             Ensure.That(client, "client").IsNotNull();
 
