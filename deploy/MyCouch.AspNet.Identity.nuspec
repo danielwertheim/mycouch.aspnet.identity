@@ -9,18 +9,16 @@
     <summary>An ASP.Net identity provider for CouchDb and Cloudant.</summary>
     <description>
       A simple implementation of the new ASP.Net identity provider model for handling authentication and authorization in e.g. ASP.Net MVC5 using CouchDb or Cloudant as storage.
-
-      Please NOTE. If you don't have NuGet up to date, some users has experienced issues with resolving dependencies.
     </description>
     <iconUrl>http://www.mycouchclient.com/logos/mycouch-nuget.png</iconUrl>
     <projectUrl>https://github.com/danielwertheim/mycouch.aspnet.identity</projectUrl>
     <licenseUrl>https://github.com/danielwertheim/mycouch.aspnet.identity#license</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <tags>aspnet mvc identity membership couchdb cloudant async asynchronous</tags>
+    <tags>aspnet mvc identity membership couchdb cloudant</tags>
     <dependencies>
        <group targetFramework="net45">
-         <dependency id="Microsoft.AspNet.Identity.Core" version="1.0.0" />
-         <dependency id="MyCouch" version="[0.21.0]" />
+         <dependency id="Microsoft.AspNet.Identity.Core" version="2.0.0" />
+         <dependency id="MyCouch" version="1.0.0" />
        </group>
     </dependencies>
   </metadata>
