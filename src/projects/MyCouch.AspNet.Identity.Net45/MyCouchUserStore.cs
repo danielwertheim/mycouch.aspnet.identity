@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using EnsureThat;
 using Microsoft.AspNet.Identity;
+using MyCouch.Requests;
 
 namespace MyCouch.AspNet.Identity
 {
@@ -12,6 +13,7 @@ namespace MyCouch.AspNet.Identity
     //TODO: Perhaps add a ThrowIfNotSuccessful to each call and check the response.IsSuccess
     //TODO: Switch for MyCouchStore when v0.21.0 is out
     public class MyCouchUserStore<TUser> :
+        IUserStore<TUser>,
         IUserPasswordStore<TUser>,
         IUserLoginStore<TUser>,
         IUserClaimStore<TUser>,
@@ -98,7 +100,7 @@ namespace MyCouch.AspNet.Identity
 
             Ensure.That(userId, "userId").IsNotNullOrWhiteSpace();
 
-            return Client.Entities.GetAsync<TUser>(userId).ContinueWith(r => r.Result.Entity);
+            return Client.Entities.GetAsync<TUser>(userId).ContinueWith(r => r.Result.Content);
         }
 
         public async virtual Task<TUser> FindByNameAsync(string userName)
@@ -107,14 +109,14 @@ namespace MyCouch.AspNet.Identity
 
             Ensure.That(userName, "userName").IsNotNullOrWhiteSpace();
 
-            var qr = await Client.Views.QueryAsync<string>(
-                _usernamesView.DesignDocument,
-                _usernamesView.Name,
-                q => q.Key(userName));
+            var request = new QueryViewRequest(_usernamesView.DesignDocument, _usernamesView.Name)
+                .Configure(q => q.Key(userName));
+
+            var qr = await Client.Views.QueryAsync<string>(request);
 
             return qr.IsEmpty
                 ? await Task.FromResult(null as TUser)
-                : await Client.Entities.GetAsync<TUser>(qr.Rows[0].Id).ContinueWith(r => r.Result.Entity);
+                : await Client.Entities.GetAsync<TUser>(qr.Rows[0].Id).ContinueWith(r => r.Result.Content);
         }
 
         public virtual Task SetPasswordHashAsync(TUser user, string passwordHash)
@@ -189,14 +191,14 @@ namespace MyCouch.AspNet.Identity
 
             Ensure.That(login, "login").IsNotNull();
 
-            var qr = await Client.Views.QueryAsync<string>(
-                _loginProviderProviderKeyView.DesignDocument,
-                _loginProviderProviderKeyView.Name,
-                q => q.Key(new[]{login.LoginProvider, login.ProviderKey}));
+            var request = new QueryViewRequest(_loginProviderProviderKeyView.DesignDocument, _loginProviderProviderKeyView.Name)
+                .Configure(q => q.Key(new[] { login.LoginProvider, login.ProviderKey }));
+
+            var qr = await Client.Views.QueryAsync<string>(request);
 
             return qr.IsEmpty
                 ? await Task.FromResult(null as TUser)
-                : await Client.Entities.GetAsync<TUser>(qr.Rows[0].Id).ContinueWith(r => r.Result.Entity);
+                : await Client.Entities.GetAsync<TUser>(qr.Rows[0].Id).ContinueWith(r => r.Result.Content);
         }
 
         public virtual Task<IList<Claim>> GetClaimsAsync(TUser user)

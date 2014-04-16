@@ -20,7 +20,7 @@ namespace MyCouch.AspNet.Identity
                     putResponse.Error ?? string.Empty,
                     putResponse.Reason ?? string.Empty);
 
-                throw new MyCouchException("Could not create design document 'userstore' with required views." + msg);
+                throw new Exception("Could not create design document 'userstore' with required views." + msg);
             }
         }
     }
