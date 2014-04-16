@@ -23,6 +23,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Net45\MyCouch.AspNet.Identity.Net45.dll" target="lib\net45" />
+    <file src="MyCouch.AspNet.Identity.Net45\MyCouch.AspNet.Identity.Net45.dll" target="lib\net45" />
   </files>
 </package>
