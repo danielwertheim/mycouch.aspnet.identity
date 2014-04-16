@@ -21,6 +21,7 @@ namespace Samples.Mvc5
 
             using (var client = new MyCouchClient(CreateUri()))
             {
+                await client.Database.PutAsync();
                 await client.EnsureDesignDocsExists();
             }
 
@@ -46,7 +47,7 @@ namespace Samples.Mvc5
         {
             return new MyCouchUriBuilder("http://localhost:5984")
                 .SetDbName("aspnet-identity")
-                .SetBasicCredentials("demo", "p@ssword")
+                .SetBasicCredentials("sa", "p@ssword")
                 .Build();
         }
     }
