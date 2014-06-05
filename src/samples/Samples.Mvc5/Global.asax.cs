@@ -23,12 +23,12 @@ namespace Samples.Mvc5
             {
                 await client.Database.PutAsync();
                 await client.EnsureDesignDocsExists();
-            }
 
-            //var mgr = new UserManager<ApplicationUser>(new MyCouchUserStore<ApplicationUser>(client));
-            //var usr = new ApplicationUser { UserName = "danieltest2" };
-            //await mgr.CreateAsync(usr, "1q2w3e4r");
-            //await mgr.AddToRoleAsync(usr.Id, "SuperHeroes");
+                //var mgr = new UserManager<ApplicationUser>(new MyCouchUserStore<ApplicationUser>(client));
+                //var usr = new ApplicationUser { UserName = "danieltest2" };
+                //await mgr.CreateAsync(usr, "1q2w3e4r");
+                //await mgr.AddToRoleAsync(usr.Id, "SuperHeroes");
+            }
         }
 
         protected void Application_BeginRequest()
@@ -47,7 +47,7 @@ namespace Samples.Mvc5
         {
             return new MyCouchUriBuilder("http://localhost:5984")
                 .SetDbName("aspnet-identity")
-                .SetBasicCredentials("sa", "p@ssword")
+                .SetBasicCredentials("sa", "test")
                 .Build();
         }
     }
