@@ -20,7 +20,7 @@ task Clean {
 }
 
 task Build {
-    Exec { msbuild "$solution_path" /t:Clean /v:quiet }
+    Exec { msbuild "$solution_path" /t:Clean /p:Configuration=$build_config /v:quiet }
     Exec { msbuild "$solution_path" /t:Build /p:Configuration=$build_config /v:quiet }
 }
 
