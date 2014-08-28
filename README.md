@@ -11,15 +11,7 @@ MyCouch.AspNet.Identity is distributed via NuGet. You can [find the CouchDb pack
 **Please note!** Some users with old versions of NuGet has reported that some dependencies might not be resolved. The solution is to update NuGet.
 
 ## Get up and running with the source ##
-Please note. **No NuGet packages are checked in**. If you are using the latest version of NuGet (v2.7.1+) you should be able to just build and the packages will be restored. If this does not work, you could install the missing NuGet packages using the provided PowerShell script:
-
-    ps:> .\setup-devenv.ps1
-
-or
-
-    cmd:> powershell -executionpolicy unrestricted .\setup-devenv.ps1
-
-For the script to work, you need to have [the NuGet command line](http://nuget.codeplex.com/releases) `(NuGet.exe) registrered in the environment path`, or you need to tweak the script so it knows where it will find your NuGet.exe.
+Please note. **No NuGet packages are checked in**. If you are using the latest version of NuGet (v2.7.1+) **you should be able to just build and the packages will be restored**. If this does not work, you could install the missing NuGet packages using a simple PowerShell script [as covered here](http://danielwertheim.se/2013/08/12/nuget-restore-powershell-vs-rake)
 
 ## Issues, questions, etc ##
 So you have issues or questions... Great! That means someone is using it. Use the issues function here at the project page or contact me via mail: firstname@lastname.se; or Twitter: [@danielwertheim](https://twitter.com/danielwertheim)
