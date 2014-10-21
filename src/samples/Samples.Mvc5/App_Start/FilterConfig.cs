@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace Samples.Mvc5
+namespace Samples.Mvc5WithIdentity2
 {
     public class FilterConfig
     {

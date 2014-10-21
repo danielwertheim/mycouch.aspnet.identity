@@ -1,4 +1,6 @@
-﻿@using Microsoft.Owin.Security
+﻿@using Samples.Mvc5WithIdentity2.Models
+@model ExternalLoginListViewModel
+@using Microsoft.Owin.Security
 
 <h4>Use another service to log in.</h4>
 <hr />
@@ -13,9 +15,7 @@
     }
     else
     {
-        string action = Model.Action;
-        string returnUrl = Model.ReturnUrl;
-        using (Html.BeginForm(action, "Account", new { ReturnUrl = returnUrl }))
+        using (Html.BeginForm(Model.Action, "Account", new { ReturnUrl = Model.ReturnUrl }))
         {
             @Html.AntiForgeryToken()
             <div id="socialLoginList">

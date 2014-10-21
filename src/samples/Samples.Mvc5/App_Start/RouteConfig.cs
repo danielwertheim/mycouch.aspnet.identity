@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace Samples.Mvc5
+namespace Samples.Mvc5WithIdentity2
 {
     public class RouteConfig
     {

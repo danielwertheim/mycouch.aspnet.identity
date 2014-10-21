@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Samples.Mvc5.Controllers
+namespace Samples.Mvc5WithIdentity2.Controllers
 {
     public class HomeController : Controller
     {
@@ -13,7 +13,6 @@ namespace Samples.Mvc5.Controllers
             return View();
         }
 
-        [Authorize(Roles = "SuperHeroes")]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
