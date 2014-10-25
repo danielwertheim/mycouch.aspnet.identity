@@ -24,7 +24,7 @@ namespace Samples.Mvc5
 
             ConfigureUserValidation(manager);
             ConfigurePasswordValidation(manager);
-            ConfigureLockOut(manager);
+            ConfigureLockout(manager);
 
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
@@ -56,7 +56,7 @@ namespace Samples.Mvc5
             };
         }
 
-        private static void ConfigureLockOut(ApplicationUserManager manager)
+        private static void ConfigureLockout(ApplicationUserManager manager)
         {
             manager.UserLockoutEnabledByDefault = true;
             manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
