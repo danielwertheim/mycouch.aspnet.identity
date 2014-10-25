@@ -16,7 +16,7 @@ MyCouch.AspNet.Identity is distributed via NuGet. You can [find the package here
 Ensure to read the [release notes](https://github.com/danielwertheim/mycouch.aspnet.identity/wiki/release-notes).
 
 ## Usage ##
-The wiki describes usage of the package.
+The [wiki](https://github.com/danielwertheim/mycouch.aspnet.identity/wiki) describes usage of the package.
 
 ## Get up and running with the source ##
 Please note. **No NuGet packages are checked in**. If you are using the latest version of NuGet (v2.7.1+) **you should be able to just build and the packages will be restored**. If this does not work, you could install the missing NuGet packages using a simple PowerShell script [as covered here](http://danielwertheim.se/2013/08/12/nuget-restore-powershell-vs-rake)
