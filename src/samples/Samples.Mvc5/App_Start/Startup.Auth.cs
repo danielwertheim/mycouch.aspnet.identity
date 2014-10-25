@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using System;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.DataProtection;
 using Microsoft.Owin.Security.Google;
 using Owin;
-using System;
-using Samples.Mvc5WithIdentity2.Models;
+using Samples.Mvc5.Models;
 
-namespace Samples.Mvc5WithIdentity2
+namespace Samples.Mvc5
 {
     public partial class Startup
     {

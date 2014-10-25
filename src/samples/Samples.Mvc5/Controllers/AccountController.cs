@@ -1,12 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Samples.Mvc5WithIdentity2.Models;
+using Samples.Mvc5.Models;
 
-namespace Samples.Mvc5WithIdentity2.Controllers
+namespace Samples.Mvc5.Controllers
 {
     [Authorize]
     public class AccountController : Controller
@@ -22,7 +23,8 @@ namespace Samples.Mvc5WithIdentity2.Controllers
             UserManager = userManager;
         }
 
-        public ApplicationUserManager UserManager {
+        public ApplicationUserManager UserManager
+        {
             get
             {
                 return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
@@ -113,7 +115,7 @@ namespace Samples.Mvc5WithIdentity2.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
-            if (userId == null || code == null) 
+            if (userId == null || code == null)
             {
                 return View("Error");
             }
@@ -173,13 +175,13 @@ namespace Samples.Mvc5WithIdentity2.Controllers
         {
             return View();
         }
-	
+
         //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
         {
-            if (code == null) 
+            if (code == null)
             {
                 return View("Error");
             }
@@ -244,6 +246,31 @@ namespace Samples.Mvc5WithIdentity2.Controllers
                 message = ManageMessageId.Error;
             }
             return RedirectToAction("Manage", new { Message = message });
+        }
+
+        //
+        // GET: /Account/ResetPasswordConfirmation
+        [AllowAnonymous]
+        public async Task<ActionResult> AssignRole()
+        {
+            var roles = await UserManager.GetRolesAsync(User.Identity.GetUserId());
+
+            return View(new AssignRoleViewModel(roles.ToArray()));
+        }
+
+        //
+        // POST: /Account/AssignRole
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AssignRole(AssignRoleViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            await UserManager.AddToRoleAsync(User.Identity.GetUserId(), model.Role);
+
+            return RedirectToAction("AssignRole");
         }
 
         //
@@ -407,13 +434,13 @@ namespace Samples.Mvc5WithIdentity2.Controllers
                     if (result.Succeeded)
                     {
                         await SignInAsync(user, isPersistent: false);
-                        
+
                         // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                         // Send an email with this link
                         // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                         // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                         // SendEmail(user.Email, callbackUrl, "Confirm your account", "Please confirm your account by clicking this link");
-                        
+
                         return RedirectToLocal(returnUrl);
                     }
                 }
@@ -523,7 +550,8 @@ namespace Samples.Mvc5WithIdentity2.Controllers
 
         private class ChallengeResult : HttpUnauthorizedResult
         {
-            public ChallengeResult(string provider, string redirectUri) : this(provider, redirectUri, null)
+            public ChallengeResult(string provider, string redirectUri)
+                : this(provider, redirectUri, null)
             {
             }
 

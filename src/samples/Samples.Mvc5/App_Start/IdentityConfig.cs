@@ -1,12 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using MyCouch;
 using MyCouch.AspNet.Identity;
-using Samples.Mvc5WithIdentity2.Models;
+using Samples.Mvc5.Models;
 
-namespace Samples.Mvc5WithIdentity2
+namespace Samples.Mvc5
 {
     // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
 
@@ -17,16 +18,34 @@ namespace Samples.Mvc5WithIdentity2
         {
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
+        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var manager = new ApplicationUserManager(new MyCouchUserStore<ApplicationUser>(context.Get<IMyCouchClient>()));
-            // Configure validation logic for usernames
+
+            ConfigureUserValidation(manager);
+            ConfigurePasswordValidation(manager);
+            ConfigureLockOut(manager);
+
+            var dataProtectionProvider = options.DataProtectionProvider;
+            if (dataProtectionProvider != null)
+            {
+                manager.UserTokenProvider =
+                    new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+            }
+            return manager;
+        }
+
+        private static void ConfigureUserValidation(ApplicationUserManager manager)
+        {
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
             };
-            // Configure validation logic for passwords
+        }
+
+        private static void ConfigurePasswordValidation(ApplicationUserManager manager)
+        {
             manager.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
@@ -35,25 +54,37 @@ namespace Samples.Mvc5WithIdentity2
                 RequireLowercase = true,
                 RequireUppercase = true,
             };
-            // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
-            // You can write your own provider and plug in here.
+        }
+
+        private static void ConfigureLockOut(ApplicationUserManager manager)
+        {
+            manager.UserLockoutEnabledByDefault = true;
+            manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            manager.MaxFailedAccessAttemptsBeforeLockout = 5;
+        }
+
+        private static void ConfigureEmailService(ApplicationUserManager manager)
+        {
+            manager.EmailService = new EmailService();
+        }
+
+        private static void ConfigureSmsService(ApplicationUserManager manager)
+        {
+            manager.SmsService = new SmsService();
+        }
+
+        private static void ConfigureTwoFactorProvider(ApplicationUserManager manager)
+        {
             manager.RegisterTwoFactorProvider("PhoneCode", new PhoneNumberTokenProvider<ApplicationUser>
             {
                 MessageFormat = "Your security code is: {0}"
             });
+
             manager.RegisterTwoFactorProvider("EmailCode", new EmailTokenProvider<ApplicationUser>
             {
                 Subject = "Security Code",
                 BodyFormat = "Your security code is: {0}"
             });
-            manager.EmailService = new EmailService();
-            manager.SmsService = new SmsService();
-            var dataProtectionProvider = options.DataProtectionProvider;
-            if (dataProtectionProvider != null)
-            {
-                manager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
-            }
-            return manager;
         }
     }
 

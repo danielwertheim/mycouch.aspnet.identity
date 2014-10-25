@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
-namespace Samples.Mvc5WithIdentity2.Controllers
+namespace Samples.Mvc5.Controllers
 {
     public class HomeController : Controller
     {
@@ -13,6 +9,7 @@ namespace Samples.Mvc5WithIdentity2.Controllers
             return View();
         }
 
+        [Authorize(Roles = "SuperHeroes")]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

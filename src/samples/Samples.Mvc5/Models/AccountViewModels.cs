@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Samples.Mvc5WithIdentity2.Models
+namespace Samples.Mvc5.Models
 {
     public class ExternalLoginConfirmationViewModel
     {
@@ -14,6 +14,22 @@ namespace Samples.Mvc5WithIdentity2.Models
     {
         public string Action { get; set; }
         public string ReturnUrl { get; set; }
+    }
+
+    public class AssignRoleViewModel
+    {
+        public string[] CurrentRoles { get; private set; }
+
+        [Required]
+        [Display(Name = "Role")]
+        public string Role { get; set; }
+
+        public AssignRoleViewModel() : this(new string[0]) { }
+
+        public AssignRoleViewModel(string[] roles)
+        {
+            CurrentRoles = roles;
+        }
     }
 
     public class ManageUserViewModel

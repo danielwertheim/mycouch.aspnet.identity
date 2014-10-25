@@ -1,7 +1,6 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
-namespace Samples.Mvc5WithIdentity2
+namespace Samples.Mvc5
 {
     public class BundleConfig
     {
