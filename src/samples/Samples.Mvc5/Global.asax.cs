@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -19,28 +18,26 @@ namespace Samples.Mvc5
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            using (var client = new MyCouchClient(CreateUri()))
+            //Demo bootstrap of ensuring database existance
+            //and view existance.
+            //NOTE! Only needed once per DB and should
+            //use some sort of bootstrap account.
+            using (var client = CreateClient())
             {
+                //Idem potent
                 await client.Database.PutAsync();
-                await client.EnsureDesignDocsExists();
 
-                //var mgr = new UserManager<ApplicationUser>(new MyCouchUserStore<ApplicationUser>(client));
-                //var usr = new ApplicationUser { UserName = "danieltest2" };
-                //await mgr.CreateAsync(usr, "1q2w3e4r");
-                //await mgr.AddToRoleAsync(usr.Id, "SuperHeroes");
+                //Create secodnary indexes a.k.a views
+                await client.EnsureAspNetIdentityDesignDocsExists();
+
+                //If you want to force a restore if the original shipped view
+                //await client.EnsureCleanAspNetIdentityDesignDocsExists();
             }
         }
 
-        protected void Application_BeginRequest()
+        internal static IMyCouchClient CreateClient()
         {
-            HttpContext.Current.Items["MyCouchClient"] = new MyCouchClient(CreateUri());
-        }
-
-        protected void Application_EndRequest()
-        {
-            var client = HttpContext.Current.Items["MyCouchClient"] as IMyCouchClient;
-            if (client != null)
-                client.Dispose();
+            return new MyCouchClient(CreateUri());
         }
 
         private static Uri CreateUri()

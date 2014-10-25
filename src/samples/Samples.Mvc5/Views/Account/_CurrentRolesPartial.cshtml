@@ -1,0 +1,11 @@
+﻿@model string[]
+
+@if (!Model.Any()) { return; }
+
+<h4>Current roles</h4>
+<ul>
+    @foreach (var role in Model)
+    {
+        <li>@role</li>
+    }
+</ul>

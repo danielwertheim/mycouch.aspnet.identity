@@ -119,14 +119,10 @@
   </resheader>
   <data name="UserStore" xml:space="preserve">
     <value>{
-   "_id": "_design/userstore",
    "language": "javascript",
    "views": {
-       "usernames": {
-           "map": "function(doc) {\n  if(doc.$doctype &amp;&amp; doc.$doctype.toLowerCase() === 'identityuser') {\n    emit(doc.userName, null);\n  }\n}"
-       },
        "loginprovider_providerkey": {
-           "map": "function(doc) {\n  if(doc.$doctype &amp;&amp; doc.$doctype.toLowerCase() === 'identityuser' &amp;&amp; doc.logins) {\n    for(var i = 0, l = doc.logins.length; i &lt; l; i++)\n      emit([doc.logins[i].loginProvider, doc.logins[i].providerKey], null);\n  }\n}"
+           "map": "function(doc) {\n  if(doc.$doctype &amp;&amp; doc.$doctype === 'identityUser' &amp;&amp; doc.logins) {\n    for(var i = 0, l = doc.logins.length; i &lt; l; i++)\n      emit([doc.logins[i].loginProvider, doc.logins[i].providerKey], null);\n  }\n}"
        }
    }
 }</value>
