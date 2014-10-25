@@ -62,14 +62,13 @@ namespace MyCouch.AspNet.Identity.Views {
         
         /// <summary>
         ///   Looks up a localized string similar to {
-        ///   &quot;_id&quot;: &quot;_design/userstore&quot;,
         ///   &quot;language&quot;: &quot;javascript&quot;,
         ///   &quot;views&quot;: {
-        ///       &quot;usernames&quot;: {
-        ///           &quot;map&quot;: &quot;function(doc) {\n  if(doc.$doctype &amp;&amp; doc.$doctype.toLowerCase() === &apos;identityuser&apos;) {\n    emit(doc.userName, null);\n  }\n}&quot;
-        ///       },
         ///       &quot;loginprovider_providerkey&quot;: {
-        ///           &quot;map&quot;: &quot;function(doc) {\n  if(doc.$doctype &amp;&amp; doc.$doctype.toLowerCase() === &apos;identityuser&apos; &amp;&amp; doc.logins) {\n    for(var i = 0, l = doc.logins.length; i &lt; l; i++)\n      emit([doc.logins[i].loginProvi [rest of string was truncated]&quot;;.
+        ///           &quot;map&quot;: &quot;function(doc) {\n  if(doc.$doctype &amp;&amp; doc.$doctype === &apos;identityUser&apos; &amp;&amp; doc.logins) {\n    for(var i = 0, l = doc.logins.length; i &lt; l; i++)\n      emit([doc.logins[i].loginProvider, doc.logins[i].providerKey], null);\n  }\n}&quot;
+        ///       }
+        ///   }
+        ///}.
         /// </summary>
         public static string UserStore {
             get {

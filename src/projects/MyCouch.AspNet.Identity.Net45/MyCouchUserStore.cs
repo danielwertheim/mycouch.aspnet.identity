@@ -9,18 +9,18 @@ using MyCouch.Requests;
 
 namespace MyCouch.AspNet.Identity
 {
-    //http://msdn.microsoft.com/en-us/library/hh524395.aspx#BKMK_TaskReturnType
-    //TODO: Perhaps add a ThrowIfNotSuccessful to each call and check the response.IsSuccess
-    //TODO: Switch for MyCouchStore when v0.21.0 is out
     public class MyCouchUserStore<TUser> :
         IUserStore<TUser>,
+        IUserLockoutStore<TUser, string>,
+        IUserTwoFactorStore<TUser, string>,
         IUserPasswordStore<TUser>,
         IUserLoginStore<TUser>,
         IUserClaimStore<TUser>,
         IUserRoleStore<TUser>,
+        IUserEmailStore<TUser>,
+        IUserPhoneNumberStore<TUser>,
         IUserSecurityStampStore<TUser> where TUser : IdentityUser, IUser
     {
-        private readonly ViewIdentity _usernamesView;
         private readonly ViewIdentity _loginProviderProviderKeyView;
 
         protected bool IsDisposed { get; private set; }
@@ -32,7 +32,6 @@ namespace MyCouch.AspNet.Identity
         {
             Ensure.That(client, "client").IsNotNull();
 
-            _usernamesView = new ViewIdentity("userstore", "usernames");
             _loginProviderProviderKeyView = new ViewIdentity("userstore", "loginprovider_providerkey");
 
             DisposeClient = false;
@@ -69,11 +68,9 @@ namespace MyCouch.AspNet.Identity
             ThrowIfDisposed();
 
             Ensure.That(user, "user").IsNotNull();
+            Ensure.That(user.Id, "user.Id").IsNotNullOrWhiteSpace();
 
-            if (string.IsNullOrEmpty(user.Id))
-                await Client.Entities.PostAsync(user);
-            else
-                await Client.Entities.PutAsync(user);
+            await Client.Entities.PutAsync(user);
         }
 
         public async virtual Task UpdateAsync(TUser user)
@@ -81,6 +78,8 @@ namespace MyCouch.AspNet.Identity
             ThrowIfDisposed();
 
             Ensure.That(user, "user").IsNotNull();
+            Ensure.That(user.Id, "user.Id").IsNotNullOrWhiteSpace();
+            Ensure.That(user.Rev, "user.Rev").IsNotNullOrWhiteSpace();
 
             await Client.Entities.PutAsync(user);
         }
@@ -109,14 +108,9 @@ namespace MyCouch.AspNet.Identity
 
             Ensure.That(userName, "userName").IsNotNullOrWhiteSpace();
 
-            var request = new QueryViewRequest(_usernamesView.DesignDocument, _usernamesView.Name)
-                .Configure(q => q.Key(userName));
+            var u = await Client.Entities.GetAsync<TUser>(userName);
 
-            var qr = await Client.Views.QueryAsync<string>(request);
-
-            return qr.IsEmpty
-                ? await Task.FromResult(null as TUser)
-                : await Client.Entities.GetAsync<TUser>(qr.Rows[0].Id).ContinueWith(r => r.Result.Content);
+            return await Task.FromResult(u.Content);
         }
 
         public virtual Task SetPasswordHashAsync(TUser user, string passwordHash)
@@ -301,6 +295,188 @@ namespace MyCouch.AspNet.Identity
             Ensure.That(user, "user").IsNotNull();
 
             return Task.FromResult(user.SecurityStamp);
+        }
+
+        public virtual Task<DateTimeOffset> GetLockoutEndDateAsync(TUser user)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            return Task.FromResult(user.LockoutEndDateUtc ?? new DateTimeOffset());
+        }
+
+        public virtual Task SetLockoutEndDateAsync(TUser user, DateTimeOffset lockoutEnd)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            user.LockoutEndDateUtc = lockoutEnd.UtcDateTime;
+
+            return Task.FromResult(0);
+        }
+
+        public virtual Task<int> IncrementAccessFailedCountAsync(TUser user)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            user.AccessFailedCount += 1;
+
+            return Task.FromResult(user.AccessFailedCount);
+        }
+
+        public virtual Task ResetAccessFailedCountAsync(TUser user)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            user.AccessFailedCount = 0;
+
+            return Task.FromResult(0);
+        }
+
+        public virtual Task<int> GetAccessFailedCountAsync(TUser user)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            return Task.FromResult(user.AccessFailedCount);
+        }
+
+        public virtual Task<bool> GetLockoutEnabledAsync(TUser user)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            return Task.FromResult(user.LockoutEnabled);
+        }
+
+        public virtual Task SetLockoutEnabledAsync(TUser user, bool enabled)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            user.LockoutEnabled = enabled;
+
+            return Task.FromResult(0);
+        }
+
+        public virtual Task SetTwoFactorEnabledAsync(TUser user, bool enabled)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            user.TwoFactorEnabled = enabled;
+
+            return Task.FromResult(0);
+        }
+
+        public virtual Task<bool> GetTwoFactorEnabledAsync(TUser user)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            return Task.FromResult(user.TwoFactorEnabled);
+        }
+
+        public virtual Task SetEmailAsync(TUser user, string email)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            user.Email = email;
+
+            return Task.FromResult(0);
+        }
+
+        public virtual Task<string> GetEmailAsync(TUser user)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            return Task.FromResult(user.Email);
+        }
+
+        public virtual Task<bool> GetEmailConfirmedAsync(TUser user)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            return Task.FromResult(user.EmailConfirmed);
+        }
+
+        public virtual Task SetEmailConfirmedAsync(TUser user, bool confirmed)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            user.EmailConfirmed = confirmed;
+
+            return Task.FromResult(0);
+        }
+
+        public virtual async Task<TUser> FindByEmailAsync(string email)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(email, "email").IsNotNullOrWhiteSpace();
+
+            var u = await Client.Entities.GetAsync<TUser>(email);
+
+            return await Task.FromResult(u.Content);
+        }
+
+        public virtual Task SetPhoneNumberAsync(TUser user, string phoneNumber)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            user.PhoneNumber = phoneNumber;
+
+            return Task.FromResult(0);
+        }
+
+        public virtual Task<string> GetPhoneNumberAsync(TUser user)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            return Task.FromResult(user.PhoneNumber);
+        }
+
+        public virtual Task<bool> GetPhoneNumberConfirmedAsync(TUser user)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            return Task.FromResult(user.PhoneNumberConfirmed);
+        }
+
+        public virtual Task SetPhoneNumberConfirmedAsync(TUser user, bool confirmed)
+        {
+            ThrowIfDisposed();
+
+            Ensure.That(user, "user").IsNotNull();
+
+            user.PhoneNumberConfirmed = confirmed;
+
+            return Task.FromResult(0);
         }
     }
 }
