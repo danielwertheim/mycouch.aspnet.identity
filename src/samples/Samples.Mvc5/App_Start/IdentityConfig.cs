@@ -25,6 +25,9 @@ namespace Samples.Mvc5
             ConfigureUserValidation(manager);
             ConfigurePasswordValidation(manager);
             ConfigureLockout(manager);
+            ConfigureEmailService(manager);
+            ConfigureSmsService(manager);
+            ConfigureTwoFactorProvider(manager);
 
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
