@@ -4,11 +4,19 @@ A simple implementation of the new ASP.Net identity provider model for handling 
 Uses [MyCouch - The asynchronous CouchDb and Cloudant client for .Net](https://github.com/danielwertheim/mycouch).
 
 ## NuGet ##
-MyCouch.AspNet.Identity is distributed via NuGet. You can [find the CouchDb package here](https://nuget.org/packages/MyCouch.AspNet.Identity/). But basically, in any .Net4.0, .Net4.5 or Windows Store app project, open up the Package manager console, and invoke:
+MyCouch.AspNet.Identity is distributed via NuGet. You can [find the package here](https://nuget.org/packages/MyCouch.AspNet.Identity/). But basically, in a ASP.Net MVC5 project using the [ASP.Net Identity 2.1 package](http://www.nuget.org/packages/Microsoft.AspNet.Identity.Core):
 
     pm:> install-package mycouch.aspnet.identity
 
 **Please note!** Some users with old versions of NuGet has reported that some dependencies might not be resolved. The solution is to update NuGet.
+
+## Releases ##
+**NOTE!** The stable version 1.0.0 is not backwards compatible as it makes use of `IdentityUser.Email` as `UserName` and `Id`; hence your CouchDB `_id` will not match. Also, the views has been reworked.
+
+Ensure to read the [release notes](https://github.com/danielwertheim/mycouch.aspnet.identity/wiki/release-notes).
+
+## Usage ##
+The wiki describes usage of the package.
 
 ## Get up and running with the source ##
 Please note. **No NuGet packages are checked in**. If you are using the latest version of NuGet (v2.7.1+) **you should be able to just build and the packages will be restored**. If this does not work, you could install the missing NuGet packages using a simple PowerShell script [as covered here](http://danielwertheim.se/2013/08/12/nuget-restore-powershell-vs-rake)
