@@ -9,7 +9,7 @@ namespace MyCouch.AspNet.Identity
     [Document(DocType = "IdentityUser", DocVersion = "2")]
     public class IdentityUser : IUser
     {
-        public string Id { get { return UserName; } set { UserName = value; } }
+        public string Id { get { return UserName; } }
         public string Rev { get; set; }
 
         public bool IsApproved { get; set; }
