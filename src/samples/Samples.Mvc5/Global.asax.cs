@@ -22,22 +22,22 @@ namespace Samples.Mvc5
             //and view existance.
             //NOTE! Only needed once per DB and should
             //use some sort of bootstrap account.
-            using (var client = CreateClient())
+            using (var store = CreateStore())
             {
                 //Idem potent
-                await client.Database.PutAsync();
+                await store.Client.Database.PutAsync();
 
                 //Create secodnary indexes a.k.a views
-                await client.EnsureAspNetIdentityDesignDocsExists();
+                await store.Client.EnsureAspNetIdentityDesignDocsExists();
 
                 //If you want to force a restore if the original shipped view
                 //await client.EnsureCleanAspNetIdentityDesignDocsExists();
             }
         }
 
-        internal static IMyCouchClient CreateClient()
+        internal static IMyCouchStore CreateStore()
         {
-            return new MyCouchClient(CreateUri());
+            return new MyCouchStore(CreateUri());
         }
 
         private static Uri CreateUri()

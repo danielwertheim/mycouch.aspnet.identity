@@ -1,16 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
+using Microsoft.Owin.Security;
 using MyCouch;
 using MyCouch.AspNet.Identity;
 using Samples.Mvc5.Models;
 
 namespace Samples.Mvc5
 {
-    // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
-
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
@@ -20,7 +22,7 @@ namespace Samples.Mvc5
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new MyCouchUserStore<ApplicationUser>(context.Get<IMyCouchClient>()));
+            var manager = new ApplicationUserManager(new MyCouchUserStore<ApplicationUser>(context.Get<IMyCouchStore>()));
 
             ConfigureUserValidation(manager);
             ConfigurePasswordValidation(manager);
