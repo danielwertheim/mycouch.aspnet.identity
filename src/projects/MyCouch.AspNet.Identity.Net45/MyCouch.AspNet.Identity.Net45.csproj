@@ -58,9 +58,11 @@
     <Compile Include="IdentityUser.cs" />
     <Compile Include="IdentityUserClaim.cs" />
     <Compile Include="IdentityUserLogin.cs" />
+    <Compile Include="Validation\IdentityUserValidator.cs" />
     <Compile Include="MyCouchClientExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MyCouchUserStore.cs" />
+    <Compile Include="Validation\IdentityUserValidatorReasons.cs" />
     <Compile Include="Views\DesignDocs.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

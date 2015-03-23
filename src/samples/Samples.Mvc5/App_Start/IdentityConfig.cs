@@ -9,6 +9,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using MyCouch;
 using MyCouch.AspNet.Identity;
+using MyCouch.AspNet.Identity.Validation;
 using Samples.Mvc5.Models;
 
 namespace Samples.Mvc5
@@ -42,7 +43,7 @@ namespace Samples.Mvc5
 
         private static void ConfigureUserValidation(ApplicationUserManager manager)
         {
-            manager.UserValidator = new UserValidator<ApplicationUser>(manager)
+            manager.UserValidator = new IdentityUserValidator<ApplicationUser>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using EnsureThat;
 using Microsoft.AspNet.Identity;
-using MyCouch.Requests;
 
 namespace MyCouch.AspNet.Identity
 {
@@ -121,7 +119,7 @@ namespace MyCouch.AspNet.Identity
             return Store.GetByIdAsync<TUser>(email);
         }
 
-        public virtual Task<TUser> FindAsync(UserLoginInfo login)
+        public virtual async Task<TUser> FindAsync(UserLoginInfo login)
         {
             ThrowIfDisposed();
 
@@ -130,9 +128,9 @@ namespace MyCouch.AspNet.Identity
             var query = new Query(_loginProviderProviderKeyView).Configure(q => q
                 .Key(new[] { login.LoginProvider, login.ProviderKey })
                 .IncludeDocs(true));
-            var u = Store.Query<TUser>(query).ToEnumerable().FirstOrDefault();
 
-            return Task.FromResult(u == null ? null : u.Value);
+            var rows = (await Store.QueryAsync<TUser>(query)).ToArray();
+            return rows.Any() ? rows.First().Value : default (TUser);
         }
 
         public virtual Task SetPasswordHashAsync(TUser user, string passwordHash)
