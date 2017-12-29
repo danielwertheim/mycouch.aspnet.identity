@@ -1,4 +1,7 @@
 # MyCouch.AspNet.Identity #
+
+**PROJECT ARCHIVED** not maintaining this repo anymore.
+
 A simple implementation of the new ASP.Net identity provider model for handling authentication and authorization in e.g. ASP.Net MVC5 using CouchDb or Cloudant as storage.
 
 Uses [MyCouch - The asynchronous CouchDb and Cloudant client for .Net](https://github.com/danielwertheim/mycouch).
